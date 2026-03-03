@@ -25,18 +25,14 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="HR Interview Transcription API",
-    description="Upload, transcribe, and get the analysis of HR interview recordings",
+    description="Upload, transcribe, and analyse HR interview recordings",
     version="1.0.0",
     lifespan=lifespan,
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
