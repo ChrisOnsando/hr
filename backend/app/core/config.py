@@ -9,42 +9,43 @@ class Settings(BaseSettings):
     OPENAI_API_KEY: str = ""
     UPLOAD_DIR: str = "./uploads"
     MAX_FILE_SIZE_MB: int = 100
-    ALLOWED_EXTENSIONS: List[str] = [".mp3", ".wav", ".m4a", ".mp4", ".mov", ".webm"]
-    CORS_ORIGINS: List[str] = ["http://localhost:5173", "http://localhost:3000"]
+    ALLOWED_EXTENSIONS: Union[List[str], str] = [".mp3", ".wav", ".m4a", ".mp4", ".mov", ".webm"]
+    CORS_ORIGINS: Union[List[str], str] = ["http://localhost:5173", "http://localhost:3000"]
 
     @field_validator("ALLOWED_EXTENSIONS", "CORS_ORIGINS", mode="before")
     @classmethod
-    def parse_flexible_list(cls, v: Union[str, List[str]]) -> List[str]:
-        """
-        Handles all formats from Render or .env:
-        1. Proper Python/JSON lists
-        2. JSON strings like '["a", "b"]'
-        3. Comma-separated strings like 'a,b,c'
-        4. Values with accidental quotes from Render env
-        """
+    def parse_flexible_list(cls, v) -> List[str]:
         if isinstance(v, list):
             return v
+
         if isinstance(v, str):
             v = v.strip()
-            # Strip surrounding quotes if present
-            if (v.startswith("'") and v.endswith("'")) or (v.startswith('"') and v.endswith('"')):
-                v = v[1:-1]
-            # Try JSON parse first
+
+            if (v.startswith("'") and v.endswith("'")) or \
+               (v.startswith('"') and v.endswith('"')):
+                v = v[1:-1].strip()
+
             try:
                 parsed = json.loads(v)
                 if isinstance(parsed, list):
-                    return parsed
+                    return [str(i).strip() for i in parsed]
             except (json.JSONDecodeError, ValueError):
                 pass
-            # Fall back to comma-separated
+
+            try:
+                parsed = json.loads(v.replace("'", '"'))
+                if isinstance(parsed, list):
+                    return [str(i).strip() for i in parsed]
+            except (json.JSONDecodeError, ValueError):
+                pass
+
             v = v.replace("[", "").replace("]", "")
-            if not v:
-                return []
             return [
-                item.strip().replace("'", "").replace('"', "")
+                item.strip().strip("'\"")
                 for item in v.split(",")
                 if item.strip()
             ]
+
         return []
 
     @property
