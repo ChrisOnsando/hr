@@ -1,1 +1,3 @@
-/* intentionally empty */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
