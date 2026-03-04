@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   ArrowLeft, Wand2, Download, FileText, Tag,
-  MessageSquare, ThumbsUp, Loader2, AlertTriangle, AudioLines,
+  MessageSquare, ThumbsUp, Loader2, AlertTriangle, Mic2,
 } from 'lucide-react'
 import { format } from 'date-fns'
 import { interviewApi } from '../services/api'
@@ -123,7 +123,7 @@ export default function InterviewDetail() {
           <div className="flex items-start justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-orange-50 rounded-xl">
-                <AudioLines className="w-6 h-6 text-orange-500" />
+                <Mic2 className="w-6 h-6 text-orange-500" />
               </div>
               <div>
                 <h1 className="font-semibold text-stone-800 text-lg leading-tight">
@@ -187,7 +187,6 @@ export default function InterviewDetail() {
               </button>
             </div>
 
-            {/* Summary */}
             {ai.summary && (
               <div className="bg-white border border-stone-200 rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
@@ -198,7 +197,6 @@ export default function InterviewDetail() {
               </div>
             )}
 
-            {/* Sentiment + Keywords row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {ai.sentiment && (
                 <div className="bg-white border border-stone-200 rounded-xl p-5">
@@ -229,14 +227,11 @@ export default function InterviewDetail() {
               ) : null}
             </div>
 
-            {/* Questions */}
             {ai.questions?.length ? (
               <div className="bg-white border border-stone-200 rounded-xl p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <MessageSquare className="w-4 h-4 text-orange-500" />
-                  <h3 className="text-xs font-semibold text-stone-500 uppercase tracking-wider">
-                    Questions Detected
-                  </h3>
+                  <h3 className="text-xs font-semibold text-stone-500 uppercase tracking-wider">Questions Detected</h3>
                 </div>
                 <ol className="space-y-2">
                   {ai.questions.map((q, i) => (
@@ -253,7 +248,6 @@ export default function InterviewDetail() {
           </section>
         )}
 
-        {/* Transcript */}
         {interview.transcript && (
           <section>
             <h2 className="text-sm font-semibold text-stone-500 uppercase tracking-wider flex items-center gap-1.5 mb-3">
