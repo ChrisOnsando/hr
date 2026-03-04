@@ -16,7 +16,7 @@
     "axios": "1.6.8",
     "react-dropzone": "14.2.3",
     "date-fns": "3.6.0",
-    "lucide-react": "0.390.0"
+    "lucide-react": "0.263.1"
   },
   "devDependencies": {
     "@types/react": "18.3.3",
